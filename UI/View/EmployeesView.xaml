@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="UI.View.EmployeesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:UI.Converters"
+             mc:Ignorable="d"
+             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+             md:DialogServiceViews.IsRegistered="True">
+    <UserControl.Resources>
+        <converters:SexConverter x:Key="SexEnumConverter"></converters:SexConverter>
+
+        <Style x:Key="DgElementStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Margin" Value="5,0,5,0"></Setter>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Popup></Popup>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button
+                    Margin="5"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    ToolTip="Добавить подразделение"
+                    Command="{Binding BackVmCommand}"
+                    VerticalAlignment="Center" HorizontalAlignment="Left">
+                <materialDesign:PackIcon Kind="ArrowLeft" />
+            </Button>
+
+            <Button
+                    Margin="5"
+                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    ToolTip="Добавить новое подразделение"
+                    Command="{Binding AddCommand}" 
+                    VerticalAlignment="Center" HorizontalAlignment="Left">
+                <materialDesign:PackIcon Kind="AccountPlus" />
+            </Button>
+        </StackPanel>
+
+        <DataGrid
+            Margin="5"
+            Grid.Row="1"
+            Background="Transparent" BorderThickness="0"
+            IsReadOnly="True"
+            CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" 
+            AutoGenerateColumns="False" 
+            SelectionMode="Single" SelectionUnit="FullRow" 
+            HeadersVisibility="Column"
+            ItemsSource="{Binding Employees}" 
+            >
+            <DataGrid.Columns>
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}" 
+                                    Header="Id" 
+                                    Binding="{Binding EmployeeId}" 
+                                    />
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}"
+                                    Header="Фамилия" 
+                                    Binding="{Binding Surname}" />
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}" 
+                                    Header="Имя" 
+                                    Binding="{Binding Name}" />
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}" 
+                                    Header="Отчество" 
+                                    Binding="{Binding Patronymic}" />
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}" 
+                                    Header="Дата рождения" 
+                                    Binding="{Binding DateOfBirth, StringFormat={}{0:d}}" />
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}" 
+                                    Header="Пол" 
+                                    Binding="{Binding Sex,Converter={StaticResource SexEnumConverter}}" />
+                <DataGridTextColumn ElementStyle="{StaticResource DgElementStyle}" 
+                                        Header="Подразделение" 
+                                        Binding="{Binding Department, TargetNullValue= Отсутствует }" />
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <StackPanel Orientation="Horizontal">
+                                <Button Width="25" Height="25"
+                                            Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                            ToolTip="Изменить"
+                                            Command="{Binding DataContext.EditCommand,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                                            CommandParameter="{Binding }">
+                                    <materialDesign:PackIcon Kind="Pencil" />
+                                </Button>
+                                <Button Width="25" Height="25"
+                                            Margin="10,0,0,0"
+                                            Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                            ToolTip="Удалить"
+                                            Command="{Binding DataContext.DeleteCommand,
+                                RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}"
+                                            CommandParameter="{Binding }">
+                                    <materialDesign:PackIcon Kind="DeleteForeverOutline" />
+                                </Button>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
+</UserControl>
