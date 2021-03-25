@@ -1,5 +1,5 @@
 # Test-project-MVVM
-Тестовое задание на использование маттерна MVVM в WPF
+Тестовое задание на использование паттерна MVVM в WPF
 - NET Core
 - EF Core
 - Autofac
